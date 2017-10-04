@@ -1,7 +1,7 @@
 package CashRegister;
 
 /**
- * Created by jasminefarley on 10/3/17.
+ * This is a class that represents the commands a USMoney register can take
  */
 public class CashRegister {
 
@@ -18,7 +18,7 @@ public class CashRegister {
     public void put(String[] array){
         int[] bills = new int[array.length];
         for (int i = 0; i< array.length; i++){
-            bills[i] = Integer.getInteger(array[i]);
+            bills[i] = Integer.parseInt(array[i]);
         }
         money.putBills(bills);
     }
@@ -26,14 +26,12 @@ public class CashRegister {
     public void take(String[] array){
         int[] bills = new int[array.length];
         for (int i = 0; i< array.length; i++){
-            bills[i] = Integer.getInteger(array[i]);
+            bills[i] = Integer.parseInt(array[i]);
         }
         money.takeBills(bills);
     }
 
-//    public String change(String numString){
-//        return money.change(Integer.getInteger(numString));
-//    }
+    public void change(String numString){ money.change(Integer.parseInt(numString)); }
 
     public String show() {
         return  money.toString();

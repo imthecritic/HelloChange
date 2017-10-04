@@ -1,9 +1,18 @@
+import CashRegister.CashRegister;
+import CashRegister.USMoney;
+
 import java.util.Scanner;
 
 /**
  *
+ * This is the command line version of the cash register
+ *
  */
 public class HelloChange {
+
+    static USMoney usMoney = new USMoney(1, 2, 3, 4 , 5);
+
+    static CashRegister cashRegister = new CashRegister(usMoney);
 
     public static void main(String[] args) {
 
@@ -15,8 +24,7 @@ public class HelloChange {
             String[] inputArray = input.split("\\s+");
 
             if (inputArray[0].equals("show")){
-                // return total in register
-                System.out.println("Total");
+                System.out.println(cashRegister.show());
             }
 
             if (inputArray[0].equals("put")){
@@ -24,7 +32,9 @@ public class HelloChange {
                     System.out.println("invalid input, try again");
                 }
                 else {
-                    System.out.println("put");
+                    String[] numStrings = {inputArray[1], inputArray[2],  inputArray[3],  inputArray[4],  inputArray[5]};
+                    cashRegister.put(numStrings);
+                    System.out.println(cashRegister.show());
                 }
             }
 
@@ -33,7 +43,9 @@ public class HelloChange {
                     System.out.println("invalid input, try again");
                 }
                 else {
-                    System.out.println("take");
+                    String[] numStrings = {inputArray[1], inputArray[2],  inputArray[3],  inputArray[4],  inputArray[5]};
+                    cashRegister.take(numStrings);
+                    System.out.println(cashRegister.show());
                 }
             }
 
@@ -42,7 +54,7 @@ public class HelloChange {
                     System.out.println("invalid input, try again");
                 }
                 else {
-                    System.out.println("change");
+                    cashRegister.change(inputArray[1]);
                 }
             }
 
@@ -52,7 +64,6 @@ public class HelloChange {
             }
 
         }
-
 
     }
 
