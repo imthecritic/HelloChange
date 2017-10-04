@@ -31,9 +31,9 @@ public class CashRegister {
         money.takeBills(bills);
     }
 
-    public String change(String numString){
-        return money.change(Integer.getInteger(numString));
-    }
+//    public String change(String numString){
+//        return money.change(Integer.getInteger(numString));
+//    }
 
     public String show() {
         return  money.toString();

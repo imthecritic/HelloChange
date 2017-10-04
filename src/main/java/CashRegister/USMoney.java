@@ -1,7 +1,10 @@
 package CashRegister;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class USMoney implements  Money {
 
@@ -55,57 +58,100 @@ public class USMoney implements  Money {
         this.calculateAmount();
     }
 
-    private HashMap<String, Integer> getAvailableBillsMap(){
-        HashMap<String, Integer> availableBillsMap = new HashMap<String, Integer>();
-        availableBillsMap.put("twenties", this.twenties);
-        availableBillsMap.put("tens", this.tens);
-        availableBillsMap.put("fives", this.fives);
-        availableBillsMap.put("twos", this.twos);
-        availableBillsMap.put("ones", this.ones);
+    private HashMap<Integer, Integer> getAvailableBillsMap(){
+        HashMap<Integer, Integer> availableBillsMap = new HashMap<Integer, Integer>();
+        availableBillsMap.put(20, this.twenties);
+        availableBillsMap.put(10, this.tens);
+        availableBillsMap.put(5, this.fives);
+        availableBillsMap.put(2, this.twos);
+        availableBillsMap.put(1, this.ones);
         return availableBillsMap;
     }
 
-    public String change(int num) {
-        this.calculateAmount();
-       int [] changeBills = {0, 0, 0, 0, 0};
-        HashMap<String, Integer> availableBillsMap = getAvailableBillsMap();
-
-        if (num>total){
-           return ("sorry, insufficient amount in register");
-       }
-       while(num>0){
-           if (num >= 20 && this.twenties>0){
-               num -= 20;
-               changeBills[0]+=1;
-               this.twenties -=1;
-           }
-           else if (num>=10 && this.tens>0){
-               num -= 10;
-               changeBills[1]+=1;
-               this.tens -=1;
-           }
-
-           else if (num>=5&& this.fives>0){
-               num -= 5;
-               changeBills[2]+=1;
-               this.fives -=1;
-           }
-
-           else if (num>=2 && this.twos>0){
-               num -= 2;
-               changeBills[3]+=1;
-               this.twos -=1;
-           }
-
-           else if (num>=1 && this.ones>0){
-               num -= 1;
-               changeBills[4]+=1;
-               this.ones -=1;
-           }
-       }
-
-        return  (changeBills[0] + " "+ changeBills[1] + " " + changeBills[2] + " " + changeBills[3] + " "+ changeBills[4]);
+    private int[] getAvailableDenominations(){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        HashMap<Integer, Integer> map = getAvailableBillsMap();
+        for (Map.Entry<Integer, Integer> entry: map.entrySet()){
+            if(entry.getValue()>0){
+                list.add(entry.getKey());
+            }
+        }
+        int[] toReturn = new int[list.size()];
+        for (int i=0; i<toReturn.length; i++){
+            toReturn[i] = list.get(i);
+        }
+        return toReturn;
     }
+
+    public void change(int amount) {
+        change(amount, new ArrayList<Integer>(), 0);
+    }
+
+    private void change(int num, List<Integer> bills, int pos) {
+        calculateAmount();
+        HashMap<Integer, Integer> map = getAvailableBillsMap();
+        int [] denominations = getAvailableDenominations();
+        if(num>total){
+            System.out.println("sorry, insufficient amount in register");
+        }
+        if (num == 0) {
+            removeChange(bills);
+            System.out.println(printChange(bills));
+        } else {
+            if (num >= denominations[pos]) {
+                bills.add(denominations[pos]);
+                change(num - denominations[pos], bills, pos);
+                bills.remove(bills.size() - 1);
+            }
+            if (pos + 1 < denominations.length) {
+                change(num, bills, pos + 1);
+            }
+        }
+
+    }
+
+    private void removeChange(List<Integer> bills) {
+        for (Integer bill : bills){
+            if (bill.equals(20)){
+                this.twenties--;
+            }
+            if (bill.equals(10)){
+                this.tens--;
+            }
+            if (bill.equals(5)){
+                this.fives--;
+            }
+            if (bill.equals(2)){
+                this.twos--;
+            }
+            if (bill.equals(1)){
+                this.ones--;
+            }
+        }
+    }
+
+    private String printChange(List<Integer> bills){
+        int [] toReturn = {0, 0, 0, 0, 0};
+        for (Integer bill : bills){
+            if (bill.equals(20)){
+                toReturn[0]++;
+            }
+            if (bill.equals(10)){
+                toReturn[1]++;
+            }
+            if (bill.equals(5)){
+                toReturn[2]++;
+            }
+            if (bill.equals(2)){
+                toReturn[3]++;
+            }
+            if (bill.equals(1)){
+                toReturn[4]++;
+            }
+        }
+        return toReturn[0] +" " + toReturn[1]+" " + toReturn[2]+" " + toReturn[3]+" " + toReturn[4];
+    }
+    
 
     public String toString(){
         return "$" + this.total + " " + this.twenties + " " + this.tens + " " + this.fives +  " " + this.twos + " " + this.ones;
