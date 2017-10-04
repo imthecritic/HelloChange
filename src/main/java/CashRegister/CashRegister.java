@@ -5,27 +5,41 @@ package CashRegister;
  */
 public class CashRegister {
 
-    private USMoney usMoney;
+    private Money money;
 
-    public CashRegister(){}
+    public CashRegister(USMoney usMoney){
+        this.money = usMoney; //Default is US Money
+    }
 
     public CashRegister(int twenties, int tens, int fives, int twos, int ones){
-        usMoney = new USMoney(twenties, tens, fives, twos, ones);
+        money = new USMoney(twenties, tens, fives, twos, ones);
     }
 
     public void put(String[] array){
-
+        int[] bills = new int[array.length];
+        for (int i = 0; i< array.length; i++){
+            bills[i] = Integer.getInteger(array[i]);
+        }
+        money.putBills(bills);
     }
 
-    public void change(String numString){
+    public void take(String[] array){
+        int[] bills = new int[array.length];
+        for (int i = 0; i< array.length; i++){
+            bills[i] = Integer.getInteger(array[i]);
+        }
+        money.takeBills(bills);
+    }
 
+    public String change(String numString){
+        return money.change(Integer.getInteger(numString));
     }
 
     public String show() {
-        return  usMoney.toString();
+        return  money.toString();
     }
 
     public String toString(){
-        return usMoney.toString();
+        return money.toString();
     }
 }

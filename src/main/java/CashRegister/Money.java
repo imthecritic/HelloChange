@@ -10,5 +10,6 @@ public interface Money {
     public int[] getBills();
     public void putBills(int[] bills);
     public void takeBills(int[] bills);
-    public int[] change(int num);
+    public String change(int num) ;
+    public String toString();
 }
